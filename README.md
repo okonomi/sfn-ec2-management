@@ -151,3 +151,15 @@ Note:
 - Replace `YOUR_ACCOUNT_ID` with your actual AWS account ID
 - Replace `YOUR_ROLE_NAME` with the IAM role name you created
 - Replace `YOUR_POLICY_NAME` with the policy name you created
+
+## Limitations
+
+- This tool only supports starting and stopping EC2 instances based on a single tag key-value pair
+- State machines are executed sequentially, which means if you have many instances to process, it may take some time to complete
+- AWS Step Functions Standard workflow type is used, which may incur costs based on the number of state transitions
+
+## References
+
+- [AWS Step Functions Developer Guide](https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html)
+- [AWS Step Functions Service Integrations](https://docs.aws.amazon.com/step-functions/latest/dg/supported-services-awssdk.html)
+- [AWS EC2 Instance States](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html)
