@@ -1,5 +1,5 @@
 {
-  "Comment": "指定されたタグを持つEC2インスタンスを停止します。パラメータ: { TagName: string, TagValue: string }",
+  "Comment": "Stop EC2 instances with the specified tag. Parameters: { TagName: string, TagValue: string }",
   "StartAt": "FindInstances",
   "States": {
     "FindInstances": {
