@@ -1,0 +1,53 @@
+{
+  "Comment": "指定されたタグを持つEC2インスタンスを起動します。パラメータ: { TagName: string, TagValue: string }",
+  "StartAt": "FindInstances",
+  "States": {
+    "FindInstances": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:ec2:describeInstances",
+      "Parameters": {
+        "Filters": [
+          {
+            "Name.$": "States.Format('tag:{}', $$.Execution.Input.TagName)",
+            "Values.$": "States.Array($$.Execution.Input.TagValue)"
+          },
+          {
+            "Name": "instance-state-name",
+            "Values": [
+              "stopped"
+            ]
+          }
+        ]
+      },
+      "ResultSelector": {
+        "InstanceIds.$": "$.Reservations[*].Instances[*].InstanceId",
+        "Count.$": "States.ArrayLength($.Reservations[*].Instances[*].InstanceId)"
+      },
+      "ResultPath": "$.FoundInstances",
+      "Next": "CheckInstanceCount"
+    },
+    "CheckInstanceCount": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.FoundInstances.Count",
+          "NumericGreaterThan": 0,
+          "Next": "StartInstances"
+        }
+      ],
+      "Default": "Success"
+    },
+    "StartInstances": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:ec2:startInstances",
+      "Parameters": {
+        "InstanceIds.$": "$.FoundInstances.InstanceIds"
+      },
+      "ResultPath": "$.StartResult",
+      "Next": "Success"
+    },
+    "Success": {
+      "Type": "Succeed"
+    }
+  }
+}
