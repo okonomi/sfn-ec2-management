@@ -110,3 +110,44 @@ aws stepfunctions start-execution \
 ```
 
 Note: Replace `REGION` and `YOUR_ACCOUNT_ID` with your actual values.
+
+## Cleanup
+
+### 1. Delete State Machines
+
+Delete the EC2 start instances state machine:
+
+```bash
+aws stepfunctions delete-state-machine \
+  --state-machine-arn arn:aws:states:REGION:YOUR_ACCOUNT_ID:stateMachine:EC2StartInstances
+```
+
+Delete the EC2 stop instances state machine:
+
+```bash
+aws stepfunctions delete-state-machine \
+  --state-machine-arn arn:aws:states:REGION:YOUR_ACCOUNT_ID:stateMachine:EC2StopInstances
+```
+
+### 2. Delete IAM Role (Optional)
+
+First, delete the role policy:
+
+```bash
+aws iam delete-role-policy \
+  --role-name YOUR_ROLE_NAME \
+  --policy-name YOUR_POLICY_NAME
+```
+
+Then, delete the IAM role:
+
+```bash
+aws iam delete-role \
+  --role-name YOUR_ROLE_NAME
+```
+
+Note:
+- Replace `REGION` with your AWS region
+- Replace `YOUR_ACCOUNT_ID` with your actual AWS account ID
+- Replace `YOUR_ROLE_NAME` with the IAM role name you created
+- Replace `YOUR_POLICY_NAME` with the policy name you created
